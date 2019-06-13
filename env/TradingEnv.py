@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from empyrical import sortino_ratio, calmar_ratio, omega_ratio
 
-from render.BitcoinTradingGraph import BitcoinTradingGraph
+from render.TradingGraph import TradingGraph
 from util.stationarization import log_and_difference
 from util.benchmarks import buy_and_hodl, rsi_divergence, sma_crossover
 from util.indicators import add_indicators
@@ -17,13 +17,13 @@ from util.indicators import add_indicators
 np.warnings.filterwarnings('ignore')
 
 
-class BitcoinTradingEnv(gym.Env):
+class TradingEnv(gym.Env):
     '''A Bitcoin trading environment for OpenAI gym'''
     metadata = {'render.modes': ['human', 'system', 'none']}
     viewer = None
 
     def __init__(self, df, initial_balance=10000, commission=0.0025, reward_func='sortino', **kwargs):
-        super(BitcoinTradingEnv, self).__init__()
+        super(TradingEnv, self).__init__()
 
         self.initial_balance = initial_balance
         self.commission = commission
@@ -31,7 +31,7 @@ class BitcoinTradingEnv(gym.Env):
 
         self.df = df.fillna(method='bfill').reset_index()
         self.stationary_df = log_and_difference(
-            self.df, ['Open', 'High', 'Low', 'Close', 'Volume BTC', 'Volume USD'])
+            self.df, ['Open', 'High', 'Low', 'Close', 'Volume'])
 
         benchmarks = kwargs.get('benchmarks', [])
         self.benchmarks = [
@@ -203,7 +203,7 @@ class BitcoinTradingEnv(gym.Env):
 
         elif mode == 'human':
             if self.viewer is None:
-                self.viewer = BitcoinTradingGraph(self.df)
+                self.viewer = TradingGraph(self.df)
 
             self.viewer.render(self.current_step,
                                self.net_worths, self.benchmarks, self.trades)

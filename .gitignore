@@ -1,8 +1,8 @@
 .vscode
 data/bitstamp.csv
 tensorboard/*
-agents
-research/results
+# agents
+# research/results
 **/__pycache__
-*.pkl
-*.db
+# *.pkl
+# *.db

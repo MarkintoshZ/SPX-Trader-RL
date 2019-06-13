@@ -17,18 +17,19 @@ from stable_baselines.common.policies import MlpLnLstmPolicy
 from stable_baselines.common.vec_env import DummyVecEnv
 from stable_baselines import PPO2
 
-from env.BitcoinTradingEnv import BitcoinTradingEnv
+from env.TradingEnv import TradingEnv
 from util.indicators import add_indicators
 
 
 reward_strategy = 'sortino'
-input_data_file = 'data/coinbase_hourly.csv'
+# input_data_file = 'data/DAT_MT_SPXUSD_M1_2018.csv'
+input_data_file = 'data/SPX5min.csv'
 params_db_file = 'sqlite:///params.db'
 
 # number of parallel jobs
-n_jobs = 4
+n_jobs = 2
 # maximum number of trials for finding the best hyperparams
-n_trials = 1000
+n_trials = 100
 # number of test episodes per trial
 n_test_episodes = 3
 # number of evaluations for pruning per trial
@@ -36,9 +37,8 @@ n_evaluations = 4
 
 
 df = pd.read_csv(input_data_file)
-df = df.drop(['Symbol'], axis=1)
-df = df.sort_values(['Date'])
-df = add_indicators(df.reset_index())
+# df = df.sort_values(['Date'])
+# df = add_indicators(df.reset_index())
 
 train_len = int(len(df) * 0.8)
 
@@ -72,9 +72,9 @@ def optimize_ppo2(trial):
 def optimize_agent(trial):
     env_params = optimize_envs(trial)
     train_env = DummyVecEnv(
-        [lambda: BitcoinTradingEnv(train_df,  **env_params)])
+        [lambda: TradingEnv(train_df,  **env_params)])
     test_env = DummyVecEnv(
-        [lambda: BitcoinTradingEnv(test_df, **env_params)])
+        [lambda: TradingEnv(test_df, **env_params)])
 
     model_params = optimize_ppo2(trial)
     model = PPO2(MlpLnLstmPolicy, train_env, verbose=0, nminibatches=1,

@@ -7,7 +7,7 @@ from stable_baselines.common.policies import MlpLnLstmPolicy
 from stable_baselines.common.vec_env import SubprocVecEnv, DummyVecEnv
 from stable_baselines import A2C, ACKTR, PPO2
 
-from env.BitcoinTradingEnv import BitcoinTradingEnv
+from env.TradingEnv import TradingEnv
 from util.indicators import add_indicators
 
 
@@ -23,12 +23,12 @@ test_df = df[train_len:]
 
 profit_study = optuna.load_study(study_name='ppo2_profit',
                           storage='sqlite:///params.db')
-profit_env = DummyVecEnv([lambda: BitcoinTradingEnv(
+profit_env = DummyVecEnv([lambda: TradingEnv(
     test_df, reward_func="profit", forecast_len=int(profit_study.best_trial.params['forecast_len']), confidence_interval=profit_study.best_trial.params['confidence_interval'])])
 
 sortino_study = optuna.load_study(study_name='ppo2_sortino',
 storage='sqlite:///params.db')
-sortino_env = DummyVecEnv([lambda: BitcoinTradingEnv(
+sortino_env = DummyVecEnv([lambda: TradingEnv(
     test_df, reward_func="profit", forecast_len=int(sortino_study.best_trial.params['forecast_len']), confidence_interval=sortino_study.best_trial.params['confidence_interval'])])
 
 # calmar_study = optuna.load_study(study_name='ppo2_sortino',
@@ -38,7 +38,7 @@ sortino_env = DummyVecEnv([lambda: BitcoinTradingEnv(
 
 omega_study = optuna.load_study(study_name='ppo2_omega',
 storage='sqlite:///params.db')
-omega_env = DummyVecEnv([lambda: BitcoinTradingEnv(
+omega_env = DummyVecEnv([lambda: TradingEnv(
     test_df, reward_func="profit", forecast_len=int(omega_study.best_trial.params['forecast_len']), confidence_interval=omega_study.best_trial.params['confidence_interval'])])
 
 

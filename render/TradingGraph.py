@@ -13,13 +13,13 @@ register_matplotlib_converters()
 VOLUME_CHART_HEIGHT = 0.33
 
 
-class BitcoinTradingGraph:
+class TradingGraph:
     """A Bitcoin trading visualization using matplotlib made to render OpenAI gym environments"""
 
     def __init__(self, df):
         self.df = df
-        self.df['Time'] = self.df['Date'].apply(
-            lambda x: datetime.strptime(x, '%Y-%m-%d %I-%p'))
+        self.df['Time'] = self.df['Date'].astype(str).apply(
+            lambda x: datetime.strptime(x, '%Y%m%d %H%M%S'))
         self.df = self.df.sort_values('Time')
 
         # Create a figure on screen and set the title
@@ -107,7 +107,7 @@ class BitcoinTradingGraph:
     def _render_volume(self, step_range, dates):
         self.volume_ax.clear()
 
-        volume = np.array(self.df['Volume BTC'].values[step_range])
+        volume = np.array(self.df['Volume'].values[step_range])
 
         self.volume_ax.plot(dates, volume,  color='blue')
         self.volume_ax.fill_between(dates, volume, color='blue', alpha=0.5)
