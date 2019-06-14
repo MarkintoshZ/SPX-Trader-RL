@@ -22,12 +22,11 @@ from util.indicators import add_indicators
 
 
 reward_strategy = 'sortino'
-# input_data_file = 'data/DAT_MT_SPXUSD_M1_2018.csv'
-input_data_file = 'data/SPX5min.csv'
+input_data_file = 'data/SPX10min.csv'
 params_db_file = 'sqlite:///params.db'
 
 # number of parallel jobs
-n_jobs = 2
+n_jobs = 4
 # maximum number of trials for finding the best hyperparams
 n_trials = 100
 # number of test episodes per trial
@@ -38,7 +37,7 @@ n_evaluations = 4
 
 df = pd.read_csv(input_data_file)
 # df = df.sort_values(['Date'])
-# df = add_indicators(df.reset_index())
+df = add_indicators(df.reset_index())
 
 train_len = int(len(df) * 0.8)
 

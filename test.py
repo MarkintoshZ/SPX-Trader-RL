@@ -11,8 +11,7 @@ from util.indicators import add_indicators
 
 curr_idx = 0
 reward_strategy = 'sortino'
-# input_data_file = 'data/DAT_MT_SPXUSD_M1_2018.csv'
-input_data_file = 'data/SPX5min.csv'
+input_data_file = 'data/SPX10min.csv'
 params_db_file = 'sqlite:///params.db'
 
 study_name = 'ppo2_' + reward_strategy
@@ -24,7 +23,7 @@ print("Best trial:", -1 * study.best_trial.value)
 
 df = pd.read_csv(input_data_file)
 # df = df.sort_values(['Date'])
-# df = add_indicators(df.reset_index())
+df = add_indicators(df.reset_index())
 
 test_len = int(len(df) * 0.2)
 train_len = int(len(df)) - test_len

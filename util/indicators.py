@@ -3,8 +3,6 @@ import ta
 
 def add_indicators(df):
     df['RSI'] = ta.rsi(df["Close"])
-    df['MFI'] = ta.money_flow_index(
-        df["High"], df["Low"], df["Close"], df["Volume"])
     df['TSI'] = ta.tsi(df["Close"])
     df['UO'] = ta.uo(df["High"], df["Low"], df["Close"])
     df['AO'] = ta.ao(df["High"], df["Low"])
@@ -48,27 +46,6 @@ def add_indicators(df):
                                                     df["Close"])
     df['DCHI'] = ta.donchian_channel_hband_indicator(df["Close"])
     df['DCLI'] = ta.donchian_channel_lband_indicator(df["Close"])
-
-    df['ADI'] = ta.acc_dist_index(df["High"],
-                                  df["Low"],
-                                  df["Close"],
-                                  df["Volume"])
-    df['OBV'] = ta.on_balance_volume(df["Close"],
-                                     df["Volume"])
-    df['CMF'] = ta.chaikin_money_flow(df["High"],
-                                      df["Low"],
-                                      df["Close"],
-                                      df["Volume"])
-    df['FI'] = ta.force_index(df["Close"],
-                              df["Volume"])
-    df['EM'] = ta.ease_of_movement(df["High"],
-                                   df["Low"],
-                                   df["Close"],
-                                   df["Volume"])
-    df['VPT'] = ta.volume_price_trend(df["Close"],
-                                      df["Volume"])
-    df['NVI'] = ta.negative_volume_index(df["Close"],
-                                         df["Volume"])
 
     df['DR'] = ta.daily_return(df["Close"])
     df['DLR'] = ta.daily_log_return(df["Close"])

@@ -1,6 +1,6 @@
 from alpha_vantage.timeseries import TimeSeries
 ts = TimeSeries(key='YOUR_API_KEY', output_format='pandas')
-data, meta_data = ts.get_intraday(symbol='MSFT',interval='5min', outputsize='full')
+data, meta_data = ts.get_intraday(symbol='MSFT',interval='1hour', outputsize='full')
 print(data)
 print(meta_data)
 print(data.describe())
