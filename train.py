@@ -7,7 +7,13 @@ from stable_baselines.common.policies import MlpLnLstmPolicy
 from stable_baselines.common.vec_env import SubprocVecEnv, DummyVecEnv
 from stable_baselines import A2C, ACKTR, PPO2
 
+<<<<<<< HEAD
 from env.TradingEnv import TradingEnv
+=======
+from pathlib import Path
+
+from env.BitcoinTradingEnv import BitcoinTradingEnv
+>>>>>>> 5407d309526a3e3fae4f353d249aceec85b6b019
 from util.indicators import add_indicators
 
 
@@ -51,7 +57,7 @@ model_params = {
 
 if curr_idx == -1:
     model = PPO2(MlpLnLstmPolicy, train_env, verbose=0, nminibatches=1,
-            tensorboard_log="./tensorboard", **model_params)
+            tensorboard_log=Path("./tensorboard").name, **model_params)
 else:
     model = PPO2.load('./agents/ppo2_' + reward_strategy + '_' + str(curr_idx) + '.pkl', env=train_env)
 
