@@ -18,9 +18,9 @@ class TradingGraph:
 
     def __init__(self, df):
         self.df = df
-        self.df['Time'] = self.df['Date'].astype(str).apply(
-            lambda x: datetime.strptime(x, '%Y%m%d %H%M%S'))
-        self.df = self.df.sort_values('Time')
+        # self.df['Time'] = self.df['Date'].astype(str).apply(
+        #     lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+        # self.df = self.df.sort_values('Time')
 
         # Create a figure on screen and set the title
         self.fig = plt.figure()
@@ -58,7 +58,7 @@ class TradingGraph:
         legend = self.net_worth_ax.legend(loc=2, ncol=2, prop={'size': 8})
         legend.get_frame().set_alpha(0.4)
 
-        last_date = self.df['Time'].values[current_step]
+        last_date = self.df['Date'].values[current_step]
         last_net_worth = net_worths[current_step]
 
         # Annotate the current net worth on the net worth graph
@@ -87,7 +87,7 @@ class TradingGraph:
         self.price_ax.plot(
             dates, self.df['Close'].values[step_range], color="black")
 
-        last_date = self.df['Time'].values[current_step]
+        last_date = self.df['Date'].values[current_step]
         last_close = self.df['Close'].values[current_step]
         last_high = self.df['High'].values[current_step]
 
@@ -118,7 +118,7 @@ class TradingGraph:
     def _render_trades(self, step_range, trades):
         for trade in trades:
             if trade['step'] in range(sys.maxsize)[step_range]:
-                date = self.df['Time'].values[trade['step']]
+                date = self.df['Date'].values[trade['step']]
                 close = self.df['Close'].values[trade['step']]
 
                 if trade['type'] == 'buy':
@@ -142,7 +142,7 @@ class TradingGraph:
 
         window_start = max(current_step - window_size, 0)
         step_range = slice(window_start, current_step + 1)
-        dates = self.df['Time'].values[step_range]
+        dates = self.df['Date'].values[step_range]
 
         self._render_net_worth(
             step_range, dates, current_step, net_worths, benchmarks)

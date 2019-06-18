@@ -28,7 +28,7 @@ params_db_file = 'sqlite:///params.db'
 # number of parallel jobs
 n_jobs = 4
 # maximum number of trials for finding the best hyperparams
-n_trials = 100
+n_trials = 5
 # number of test episodes per trial
 n_test_episodes = 3
 # number of evaluations for pruning per trial

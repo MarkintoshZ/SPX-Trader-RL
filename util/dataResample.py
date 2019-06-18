@@ -13,8 +13,10 @@ ndf = df.resample('10Min').agg({
     })
 
 ndf.columns = ['Open', 'High', 'Low', 'Close', 'STD', 'Median', 'Volume']
-print(ndf)
+ndf.dropna(inplace=True)
 ndf.reset_index(inplace=True)
+
+print(ndf.head(60))
 
 ndf.to_csv('SPX10min.csv', 
            header=['Date', 'Open', 'High', 'Low', 'Close',

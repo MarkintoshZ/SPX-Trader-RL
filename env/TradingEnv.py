@@ -14,7 +14,7 @@ from util.indicators import add_indicators
 
 
 # Delete this if debugging
-np.warnings.filterwarnings('ignore')
+# np.warnings.filterwarnings('ignore')
 
 
 class TradingEnv(gym.Env):
@@ -53,7 +53,7 @@ class TradingEnv(gym.Env):
         self.forecast_len = kwargs.get('forecast_len', 10)
         self.confidence_interval = kwargs.get('confidence_interval', 0.95)
         self.obs_shape = (1, 5 + len(self.df.columns) -
-                          2 + (self.forecast_len * 3))
+                          2)
 
         # Actions of the format Buy 1/4, Sell 3/4, Hold (amount ignored), etc.
         self.action_space = spaces.Discrete(12)
@@ -75,15 +75,15 @@ class TradingEnv(gym.Env):
 
         obs = scaled.values[-1]
 
-        past_df = self.stationary_df['Close'][:
-                                              self.current_step + self.forecast_len + 1]
-        forecast_model = SARIMAX(past_df.values, enforce_stationarity=False, simple_differencing=True)
-        model_fit = forecast_model.fit(method='bfgs', disp=False)
-        forecast = model_fit.get_forecast(
-            steps=self.forecast_len, alpha=(1 - self.confidence_interval))
+        # past_df = self.stationary_df['Close'][:
+        #                                       self.current_step + self.forecast_len + 1]
+        # forecast_model = SARIMAX(past_df.values, enforce_stationarity=False, simple_differencing=True)
+        # model_fit = forecast_model.fit(method='bfgs', disp=False)
+        # forecast = model_fit.get_forecast(
+        #     steps=self.forecast_len, alpha=(1 - self.confidence_interval))
 
-        obs = np.insert(obs, len(obs), forecast.predicted_mean, axis=0)
-        obs = np.insert(obs, len(obs), forecast.conf_int().flatten(), axis=0)
+        # obs = np.insert(obs, len(obs), forecast.predicted_mean, axis=0)
+        # obs = np.insert(obs, len(obs), forecast.conf_int().flatten(), axis=0)
 
         scaled_history = scaler.fit_transform(
             self.account_history.astype('float32'))

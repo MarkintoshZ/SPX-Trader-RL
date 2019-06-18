@@ -9,17 +9,9 @@ from stable_baselines import A2C, ACKTR, PPO2
 from env.TradingEnv import TradingEnv
 from util.indicators import add_indicators
 
-curr_idx = 2
+curr_idx = 0
 reward_strategy = 'sortino'
 input_data_file = 'data/SPX10min.csv'
-params_db_file = 'sqlite:///params.db'
-
-study_name = 'ppo2_' + reward_strategy
-study = optuna.load_study(study_name=study_name, storage=params_db_file)
-params = study.best_trial.params
-
-print("Testing PPO2 agent with params:", params)
-print("Best trial:", -1 * study.best_trial.value)
 
 df = pd.read_csv(input_data_file)
 # df = df.sort_values(['Date'])
@@ -31,17 +23,7 @@ train_len = int(len(df)) - test_len
 test_df = df[train_len:]
 
 test_env = DummyVecEnv([lambda: TradingEnv(
-    test_df, reward_func=reward_strategy, forecast_len=int(params['forecast_len']), confidence_interval=params['confidence_interval'])])
-
-model_params = {
-    'n_steps': int(params['n_steps']),
-    'gamma': params['gamma'],
-    'learning_rate': params['learning_rate'],
-    'ent_coef': params['ent_coef'],
-    'cliprange': params['cliprange'],
-    'noptepochs': int(params['noptepochs']),
-    'lam': params['lam'],
-}
+    test_df, reward_func=reward_strategy, forecast_len=50, confidence_interval=0.95)])
 
 model = PPO2.load('./agents/ppo2_' + reward_strategy + '_' + str(curr_idx) + '.pkl', env=test_env)
 
